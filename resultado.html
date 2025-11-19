@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado - Mundo Perfeito</title>
+    <style>
+        body {
+                background-color: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/imagens/agua.jpg'); /* Ajuste o caminho se necessário */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Courier New', monospace;
+            color: #f7d773;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .monitor-wrapper {
+            border-radius: 10px;
+            border: 4px solid red;
+            position: fixed;
+            left: 3%;
+            right: 3%;
+            top: 5%;
+            bottom: 5%;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+        }
+
+        .top-bar {
+            border-bottom: 2px solid #f7d773;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content-result {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .info-box {
+            background: #3d3d3d;
+            border: 1px solid #f7d773;
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 90%;
+            text-align: left;
+        }
+
+        .info-box p { margin: 5px 0; color: #fff; font-size: 0.9rem; }
+        .info-box span { color: #f7d773; font-weight: bold; }
+
+        .image-frame {
+            border: 2px dashed red;
+            padding: 5px;
+            background: #000;
+            max-width: 60vh; /* Limita altura para caber na tela */
+            max-height: 50vh;
+            margin-bottom: 20px;
+        }
+
+        .image-frame img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            cursor: pointer;
+        }
+
+        .actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            background-color: #f7d773;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #fff;
+        }
+
+        .btn-sec {
+            background: transparent;
+            border: 1px solid #f7d773;
+            color: #f7d773;
+        }
+        .btn-sec:hover { background: #f7d773; color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="monitor-wrapper">
+        <div class="top-bar">
+            <span>RESULTADO DA MATERIALIZAÇÃO</span>
+            <span>STATUS: SUCESSO</span>
+        </div>
+
+        <div class="content-result">
+            <h2>MUNDO DE <span id="nomeExibido" style="color:red;">USUÁRIO</span></h2>
+
+            <div class="info-box">
+                <p><span>> PROMPT INPUT:</span> <span id="visaoTexto" style="color: white; font-style: italic;">...</span></p>
+            </div>
+
+            <div class="image-frame">
+                <img id="imagemResultado" src="" alt="Gerando..." title="Clique para expandir">
+            </div>
+
+            <div class="actions">
+                <a href="/" class="btn btn-sec">NOVA SIMULAÇÃO</a>
+                <a id="downloadLink" href="#" class="btn" target="_blank">BAIXAR ARQUIVO</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const nome = urlParams.get('nome');
+        const mundoPerfeito = urlParams.get('mundo_perfeito');
+        const imagemUrl = urlParams.get('imagem_url');
+
+        document.getElementById('nomeExibido').textContent = nome || 'DESCONHECIDO';
+        document.getElementById('visaoTexto').textContent = mundoPerfeito || 'DADOS CORROMPIDOS';
+        
+        const imgElement = document.getElementById('imagemResultado');
+        imgElement.src = imagemUrl || '';
+        
+        const linkDownload = document.getElementById('downloadLink');
+        linkDownload.href = imagemUrl;
+
+        imgElement.addEventListener('click', function() {
+            window.open(this.src, '_blank');
+        });
+    </script>
+</body>
+</html>

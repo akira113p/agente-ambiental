@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapiroBot - Sobre Nós</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nos.css') }}">
+</head>
+<body>
+
+
+
+<style>
+
+
+
+/* static/css/nos.css */
+
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/imagens/agua.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #000;
+    font-family: 'Courier New', monospace;
+    overflow-y: auto; /* Permite rolar a página "Sobre" */
+    color: #f7d773;
+    padding: 20px;
+}
+
+/* Botão voltar */
+.botao-voltar {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: transparent;
+    text-decoration: none;
+    border: 1px solid #f7d773;
+    color: #f7d773;
+    margin: 1%;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    transition: background-color 0.3s, color 0.3s;
+    z-index: 100;
+}
+.botao-voltar:hover {
+    background-color: #f7d773;
+    color: #000;
+}
+.texto-botao {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Wrapper principal com a borda vermelha */
+.conteiner-principal {
+    border-radius: 10px;
+    border: 4px solid red;
+    margin-top: 80px; /* Espaço para o botão voltar */
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.titulo {
+    font-size: 2.5em;
+    color: #f7d773;
+    margin-bottom: 10px;
+}
+
+.subtitulo {
+    font-size: 1.2em;
+    color: #f7d773;
+    margin-bottom: 40px;
+}
+
+.cards-conteiner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background: #3d3d3d;
+    border: 1px solid #f7d773;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.card-imagem {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f7d773;
+}
+
+.card-nome {
+    font-size: 1.5rem;
+    color: #f7d773;
+    margin: 15px 0 5px;
+}
+
+.card-texto {
+    font-size: 0.9rem;
+    color: #fff;
+    line-height: 1.4;
+}
+
+
+
+</style>
+
+
+    <a href="{{ url_for('start') }}" class="botao-voltar">
+        <span class="texto-botao">← VOLTAR</span>
+    </a>
+
+    <main class="conteiner-principal">
+        <h1 class="titulo">SOBRE NÓS</h1>
+        <p class="subtitulo">Conheça a equipe por trás do projeto Capybara.</p>
+
+        <div class="cards-conteiner">
+            <div class="card">
+                <img src="{{ url_for('static', filename='imagens/Mídia (2).jpg') }}" alt="Pachu" class="card-imagem">
+                <h3 class="card-nome">Pachu</h3>
+                <p class="card-texto">Liderança, organizador da parte física e visual e modelagem 3D.</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='imagens/Mídia (3).jpg') }}" alt="Cesar" class="card-imagem">
+                <h3 class="card-nome">Cesar</h3>
+                <p class="card-texto">Semilíder.</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='imagens/Mídia (1).jpg') }}" alt="Leo" class="card-imagem">
+                <h3 class="card-nome">Leo</h3>
+                <p class="card-texto">Programação front-end.</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='imagens/Mídia.jpg') }}" alt="Yuri" class="card-imagem">
+                <h3 class="card-nome">Yuri</h3>
+                <p class="card-texto">Modelagem 3D e programação front-end.</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='imagens/Mídia (4).jpg') }}" alt="Caio" class="card-imagem">
+                <h3 class="card-nome">Caio</h3>
+                <p class="card-texto">Programação back-end, integrador de AI agent.</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='imagens/Mídia (5).jpg') }}" alt="Porto" class="card-imagem">
+                <h3 class="card-nome">Porto</h3>
+                <p class="card-texto">Parte artística (Pintura do projeto).</p>
+            </div>
+            <div class="card">
+         
+                <img src="{{ url_for('static', filename='imagens/Mídia (6).jpg') }}" alt="Pyetro" class="card-imagem">
+                <h3 class="card-nome">Pyetro</h3>
+                <p class="card-texto">Baiano.</p>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

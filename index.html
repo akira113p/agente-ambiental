@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Perfeito - Terminal</title>
+    <style>
+        /* ESTILO CAPYROBOT / RETRO */
+        body {
+                background-color: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/imagens/agua.jpg'); /* Ajuste o caminho se necessário */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Courier New', monospace;
+            color: #f7d773;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* Header fixo no topo */
+        .header-sistema {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            box-sizing: border-box;
+            background: #000;
+            border-bottom: 1px solid #f7d773;
+            z-index: 10;
+        }
+
+        /* Wrapper principal (Borda Vermelha) */
+        .monitor-wrapper {
+            border-radius: 10px;
+            border: 4px solid red;
+            position: fixed;
+            left: 3%;
+            right: 3%;
+            top: 12%;
+            bottom: 9%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/imagens/agua.jpg'); /* Ajuste o caminho se necessário */
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px red;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+
+        /* Botão Estilo Porta/Retro */
+        .btn-retro {
+            background-color: #f7d773;
+            color: #000;
+            border: 2px solid #f7d773;
+            padding: 15px 40px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .btn-retro:hover {
+            background-color: #000;
+            color: #f7d773;
+            box-shadow: 0 0 15px #f7d773;
+        }
+
+        /* Footer */
+        .footer-sistema {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+footer .esquerda {
+    display: flex;
+    margin: 1%;
+    justify-content: space-between;
+}
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="header-sistema">
+        <span>SISTEMA: ONLINE</span>
+        <span>DATA: 2500</span>
+    </div>
+
+    <div class="monitor-wrapper">
+        <div style="text-align: center;">
+            <h1>CAPYROBOT</h1>
+            <p class="subtitle">A ODS 6 tem a missão vital de garantir o acesso universal à água potável e ao saneamento básico, <br>assegurando saúde e dignidade para todas as pessoas enquanto preserva os recursos hídricos do planeta.</p>
+            
+            <br>
+            
+<img src="('/imagens/agua.jpg')" alt="">
+
+            <a href="pergunta_nome.html" class="btn-retro">
+                INICIAR SIMULAÇÃO
+            </a>
+        </div>
+    </div>
+
+
+      <footer>
+        <div class="esquerda">
+            <p class="date" id="date">-- / -- / 3500</p>
+            <p class="info_bottom" id="ver">Versão do sistema: 4</p>
+        </div>
+        <a href="{{ url_for('nos') }}"><button>Sobre nós</button></a>
+    </footer>
+
+    <div class="footer-sistema">
+        <p>CONNECTED TO NEURAL NETWORK</p>
+    </div>
+
+</body>
+</html>

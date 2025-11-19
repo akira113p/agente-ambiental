@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visão - Mundo Perfeito</title>
+    <style>
+        body {
+             background-color: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/imagens/agua.jpg'); /* Ajuste o caminho se necessário */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Courier New', monospace;
+            color: #f7d773;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .monitor-wrapper {
+            border-radius: 10px;
+            border: 4px solid red;
+            position: fixed;
+            left: 3%;
+            right: 3%;
+            top: 5%;
+            bottom: 5%;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+        }
+
+        .top-bar {
+            border-bottom: 2px solid #f7d773;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h3 {
+            color: #f7d773;
+            text-align: center;
+            border-bottom: 1px dashed #f7d773;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        #nomeExibido { text-transform: uppercase; color: red; }
+
+        /* Textarea Retro */
+        textarea {
+            width: 100%;
+            max-width: 800px;
+            height: 150px;
+            background-color: #3d3d3d;
+            border: 2px solid #f7d773;
+            color: #f7d773;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            padding: 15px;
+            margin-bottom: 20px;
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: red;
+            background-color: #2a2a2a;
+        }
+
+        .btn-gerar {
+            background-color: #f7d773;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-gerar:hover {
+            background-color: red;
+            color: white;
+            box-shadow: 0 0 15px red;
+        }
+
+        .btn-voltar {
+            background: transparent;
+            border: 1px solid #f7d773;
+            color: #f7d773;
+            padding: 5px 15px;
+            text-decoration: none;
+        }
+
+        /* Loading Spinner */
+        #loading {
+            margin-top: 20px;
+            color: red;
+            font-weight: bold;
+            border: 1px solid red;
+            padding: 10px;
+            display: none;
+            background: #000;
+        }
+
+        .spinner {
+            border: 4px solid #333;
+            border-top: 4px solid red;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        audio { filter: invert(100%) hue-rotate(180deg); margin-bottom: 20px;}
+    </style>
+</head>
+<body>
+    <div class="monitor-wrapper">
+        <div class="top-bar">
+            <a href="/pergunta_nome.html" class="btn-voltar">← REINICIAR</a>
+            <span>MODO: CRIAÇÃO</span>
+        </div>
+
+        <div class="content-area">
+            <h3>OLÁ, <span id="nomeExibido">USUÁRIO</span>.<br>COMO É O SEU MUNDO PERFEITO?</h3>
+
+            <div style="text-align: center; width: 100%;">
+                <audio id="audioPersonalizado" controls>
+                    <source src="" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <form id="formMundo" onsubmit="return false;" style="width: 100%; text-align: center;">
+                <label style="display: block; text-align: left; max-width: 800px; margin: 0 auto 10px auto;">> INSIRA OS DADOS DA VISÃO:</label>
+                <textarea name="mundo_perfeito" id="mundoPerfeito" placeholder="Ex: Um mundo cyberpunk com luzes neon..." required></textarea>
+                <br>
+                <button type="submit" class="btn-gerar" id="btnGerar">MATERIALIZAR IMAGEM</button>
+            </form>
+
+            <div id="loading">
+                <div class="spinner"></div> PROCESSANDO DADOS DA NEURAL NETWORK...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nomeUsuario = urlParams.get('nome');
+            document.getElementById('nomeExibido').textContent = nomeUsuario || 'VIAJANTE';
+
+            // Lógica de áudio mantida
+            if (nomeUsuario) {
+                const audioEl = document.getElementById('audioPersonalizado');
+                const sourceEl = audioEl.querySelector('source');
+                sourceEl.src = `http://127.0.0.1:5000/audio_personalizado/${encodeURIComponent(nomeUsuario)}`;
+                
+                audioEl.addEventListener('canplay', function() {
+                    setTimeout(() => { audioEl.play().catch(e => console.log(e)); }, 300);
+                }, { once: true });
+                
+                audioEl.load();
+                // Fallback
+                setTimeout(() => { if (audioEl.readyState >= 2) audioEl.play().catch(e => console.log(e)); }, 2000);
+            }
+
+            // Lógica do formulário mantida
+            const formMundo = document.getElementById('formMundo');
+            formMundo.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const mundoPerfeito = document.getElementById('mundoPerfeito').value;
+                const loading = document.getElementById('loading');
+                const btnGerar = document.getElementById('btnGerar');
+                
+                if (!mundoPerfeito.trim()) return alert('DADOS INSUFICIENTES.');
+                
+                loading.style.display = 'inline-block';
+                btnGerar.disabled = true;
+                btnGerar.style.opacity = '0.5';
+                btnGerar.textContent = 'PROCESSANDO...';
+                
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/gerar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nome: nomeUsuario || 'Usuário', mundo_perfeito: mundoPerfeito })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        window.location.href = `/resultado.html?nome=${encodeURIComponent(data.nome)}&mundo_perfeito=${encodeURIComponent(data.mundo_perfeito)}&imagem_url=${encodeURIComponent(data.imagem_url)}`;
+                    } else {
+                        alert('ERRO DE SISTEMA: ' + (data.erro || 'Unknown'));
+                        loading.style.display = 'none';
+                        btnGerar.disabled = false;
+                        btnGerar.textContent = 'MATERIALIZAR IMAGEM';
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    alert('FALHA NA CONEXÃO COM O SERVIDOR.');
+                    loading.style.display = 'none';
+                    btnGerar.disabled = false;
+                    btnGerar.textContent = 'MATERIALIZAR IMAGEM';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

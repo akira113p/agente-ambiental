@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identificação - Mundo Perfeito</title>
+    <style>
+        body {
+              background-color: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/imagens/agua.jpg'); /* Ajuste o caminho se necessário */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Courier New', monospace;
+            color: #f7d773;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .monitor-wrapper {
+            border-radius: 10px;
+            border: 4px solid red;
+            position: fixed;
+            left: 3%;
+            right: 3%;
+            top: 5%;
+            bottom: 5%;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+        }
+
+        .top-bar {
+            border-bottom: 2px solid #f7d773;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-center {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 { margin-bottom: 10px; }
+
+        /* Input Retro */
+        input[type="text"] {
+            background-color: #3d3d3d;
+            border: 2px solid #f7d773;
+            color: #f7d773;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            width: 80%;
+            max-width: 400px;
+            margin: 20px 0;
+            outline: none;
+            text-align: center;
+        }
+
+        input[type="text"]:focus {
+            border-color: red;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+
+        .btn {
+            background-color: #f7d773;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #fff;
+        }
+
+        .btn-voltar {
+            background: transparent;
+            border: 1px solid #f7d773;
+            color: #f7d773;
+            padding: 5px 15px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-voltar:hover {
+            background: #f7d773;
+            color: #000;
+        }
+
+        /* Audio Player Customization (Tentativa de deixar mais dark) */
+        audio {
+            filter: invert(100%) hue-rotate(180deg); /* Inverte cores para ficar dark */
+            margin-bottom: 20px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="monitor-wrapper">
+        <div class="top-bar">
+            <a href="index.html" class="btn-voltar">← VOLTAR</a>
+            <span>IDENTIFICAÇÃO</span>
+        </div>
+
+        <div class="content-center">
+            <h1>QUEM É VOCÊ?</h1>
+            <p>Identifique-se para acessar o sistema.</p>
+            
+            <div style="margin: 20px 0;">
+                <audio controls>
+                    <source src="http://127.0.0.1:5000/audio_pergunta" type="audio/mpeg">
+                    Seu navegador não suporta áudio.
+                </audio>
+            </div>
+            
+            <form action="/mundo_perfeito.html" method="GET" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <input type="text" id="nome" name="nome" placeholder="DIGITE SEU NOME..." required autocomplete="off">
+                <button type="submit" class="btn">CONFIRMAR >></button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            setTimeout(() => {
+                const audioPergunta = document.querySelector('audio');
+                if (audioPergunta) {
+                    audioPergunta.play().catch(err => console.log('Autoplay bloqueado:', err));
+                }
+            }, 500);
+        };
+    </script>
+</body>
+</html>
