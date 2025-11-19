@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Capybara ODS 6</title>
+    <!-- Inclua seu CSS aqui -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <style>
+        /* Estilização para o spinner de carregamento */
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Estilização para o botão IMG no modo imagem */
+        .botao-img-ativo {
+            background-color: #e53e3e !important; /* Vermelho para indicar modo imagem */
+            color: white;
+        }
+        .mensagem-bot img, .mensagem-usuario img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="{{ url_for('start') }}" class="botao-voltar">
+        <span class="texto-botao">← VOLTAR</span>   
+    </a>
+
+    <main class="chat-wrapper">
+        
+        <div class="chat-cabecalho">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='imagens/capyrobot.png') }}" alt="Capyrobot Logo">
+                <h1>Capyrobot</h1>
+            </div>
+            <!-- Novo: Seção para exibir o status de geração de imagem -->
+            <div id="image-status" style="display: none; color: orange; font-weight: bold; margin-top: 10px;">
+                Gerando imagem... <span class="loading-spinner"></span>
+            </div>
+        </div>
+        
+        <div class="chat-mensagens" id="chat-mensagens">
+            <!-- Mensagem inicial do bot (passada pelo Flask) -->
+            <div class="mensagem mensagem-bot">
+                {% if base %}
+                    <p>{{base}}</p>
+                {% endif %}
+            </div>
+            <!-- As mensagens de chat/imagem serão adicionadas dinamicamente aqui -->
+        </div>
+            
+        <div class="input-container">
+            <form id="chat-form"> 
+                <!-- Novo: Campo oculto para indicar o MODO (chat ou imagem) -->
+                <input type="hidden" id="action-mode" name="action_mode" value="chat">
+
+                <input type="text" class="chat-input" id="chat-input" name="chat" placeholder="Digite sua mensagem ou um prompt de imagem..." required>
+                
+                <!-- Botão Enviar Mensagem (Usado para ambos os modos) -->
+                <button type="submit" class="botao-enviar" id="botao-enviar" title="Enviar ou Gerar">
+                    →
+                </button>
+                
+                <!-- Botão para ALTERNAR o modo para IMAGEM -->
+                <button type="button" class="botao-enviar" id="botao-img" title="Alternar para Modo Imagem">
+                    IMG
+                </button>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Script para a lógica de chat e imagem -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const chatMessages = document.getElementById('chat-mensagens');
+            const botaoImg = document.getElementById('botao-img');
+            const imageStatus = document.getElementById('image-status');
+            const actionMode = document.getElementById('action-mode');
+            const botaoEnviar = document.getElementById('botao-enviar');
+
+            // Rola para a mensagem mais recente no carregamento
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // 1. Função para adicionar mensagens ao chat
+            function addMessage(text, type, isImage = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = type === 'user' ? 'mensagem-usuario' : 'mensagem mensagem-bot';
+                
+                if (isImage) {
+                    // Texto é o base64 da imagem
+                    messageDiv.innerHTML = `<p>Imagem gerada para: <em>${chatInput.getAttribute('data-last-prompt')}</em></p>`;
+                    messageDiv.innerHTML += `<img src="data:image/png;base64,${text}" alt="Imagem Gerada">`;
+                } else {
+                    messageDiv.innerHTML = `<p>${text}</p>`;
+                }
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // 2. Função para alternar o modo (CHAT/IMAGEM)
+            function setMode(mode) {
+                actionMode.value = mode;
+                if (mode === 'image') {
+                    botaoImg.classList.add('botao-img-ativo');
+                    chatInput.placeholder = "Descreva a imagem que você deseja gerar...";
+                    botaoEnviar.textContent = "IMG";
+                    botaoEnviar.title = "Gerar Imagem";
+                } else {
+                    botaoImg.classList.remove('botao-img-ativo');
+                    chatInput.placeholder = "Digite sua mensagem...";
+                    botaoEnviar.textContent = "→";
+                    botaoEnviar.title = "Enviar Mensagem";
+                }
+            }
+
+            // Inicializa o modo
+            setMode('chat');
+
+            // 3. Listener para o botão IMG (alterna o modo)
+            botaoImg.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                setMode(actionMode.value === 'chat' ? 'image' : 'chat');
+            });
+
+            // 4. Lógica de envio do formulário
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const userMessage = chatInput.value.trim();
+                if (!userMessage) return;
+
+                // Armazena o prompt (útil para o caption da imagem)
+                chatInput.setAttribute('data-last-prompt', userMessage);
+
+                // Adiciona a mensagem do usuário
+                addMessage(userMessage, 'user');
+                
+                const action = actionMode.value;
+
+                // Limpa o input antes da chamada da API
+                chatInput.value = '';
+
+                if (action === 'chat') {
+                    handleChat(userMessage);
+                    // Volta o modo para chat após o envio do chat
+                    setMode('chat'); 
+                } else if (action === 'image') {
+                    handleImage(userMessage);
+                    // Volta o modo para chat após o envio da imagem
+                    setMode('chat'); 
+                }
+            });
+            
+            // 5. Lógica de CHAT (Chamando a nova rota JSON /api/chat)
+            async function handleChat(prompt) {
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'mensagem mensagem-bot loading-message';
+                loadingDiv.innerHTML = '<p>Capyrobot está digitando... <span class="loading-spinner"></span></p>';
+                chatMessages.appendChild(loadingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                try {
+                    const response = await fetch('/api/chat', { 
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ prompt: prompt })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Remove o loading
+                    loadingDiv.remove();
+
+                    if (response.ok && data.response_text) {
+                        addMessage(data.response_text, 'bot');
+                    } else {
+                        addMessage(`Erro no chat: ${data.error || 'Erro desconhecido'}`, 'bot');
+                    }
+                } catch (error) {
+                    loadingDiv.remove();
+                    addMessage("Erro de rede ao enviar mensagem. Verifique o servidor.", 'bot');
+                    console.error('Erro no CHAT:', error);
+                }
+            }
+            
+            // 6. Lógica de IMAGEM (Chamando a rota JSON /generate-image)
+            async function handleImage(prompt) {
+                imageStatus.style.display = 'block';
+                
+                try {
+                    const response = await fetch('/generate-image', { 
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ prompt: prompt })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    imageStatus.style.display = 'none';
+
+                    if (response.ok && data.image_base64) {
+                        // Adiciona a imagem no chat
+                        addMessage(data.image_base64, 'bot', true); 
+                    } else {
+                        addMessage(`Erro ao gerar imagem: ${data.error || 'Erro desconhecido'}`, 'bot');
+                    }
+
+                } catch (error) {
+                    imageStatus.style.display = 'none';
+                    addMessage("Erro ao gerar imagem.", 'bot');
+                    console.error('Erro na Imagem:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

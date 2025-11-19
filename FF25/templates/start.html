@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capyrobot - Sistema</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/start.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="header__esquerda">
+            <p class="info_cima" id="relogio">--:--</p>
+            <p class="info_cima">Planeta: Terra</p>
+        </div>
+        <div class="header__direita">
+            <p class="info_cima">Ano: 3500</p>
+            <p class="info_cima">Usuário: Publico</p>
+            <div class="integr_ysys">
+                <img src="{{ url_for('static', filename='imagens/.png') }}" alt="Integridade">
+                <input type="button" value="sistema" class="system" id="integr_ysys"
+                    onclick="show_sys()">
+            </div>
+        </div>
+    </header>
+
+    <div class="sistema_hiden" id="sistema-popup">
+        
+        <h1>integridade do sistema</h1><br>
+        <h1 id="integr_ysys01" class="integridade_sistema">100%</h1>
+        <h4>deseja restaurar a integridade do sistema?</h4>
+        <button><a href="#"> Resetar sistema </a></button>
+    </div>
+
+    <main>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='imagens/capyrobot.png') }}" alt="logo">
+            <h1>Capyrobot</h1>
+        </div>
+        <div class="main02">
+            <div class="button-container" id="naveButton" data-url="{{ url_for('chat_page') }}">
+                <div class="door door-left"> ini </div>
+                <div class="door door-right">ciar </div>
+                <div class="text-overlay" id="contagem">Iniciando em: 3</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="esquerda">
+            <p class="date" id="date">-- / -- / 3500</p>
+            <p class="info_bottom" id="ver">Versão do sistema: 4</p>
+        </div>
+        <a href="{{ url_for('nos') }}"><button>Sobre nós</button></a>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
