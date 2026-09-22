@@ -121,13 +121,14 @@ cd FF25
 pip install flask python-dotenv openai google-genai
 ```
 
-Crie um arquivo `.env` dentro de `FF25/` com a sua chave da OpenAI:
+Crie um arquivo `.env` dentro de `FF25/` (use `FF25/.env.example` como base) com as suas chaves:
 
 ```
 OPENAI_API_KEY=sk-...
+GEMINI_API_KEY=...
 ```
 
-> **Atenção:** no código atual (`FF25/app.py`), a chave da API do Gemini está escrita diretamente no código-fonte (`genai.Client(api_key="...")`) em vez de ser lida de uma variável de ambiente. Antes de publicar ou reutilizar este projeto, recomenda-se remover essa chave do código e passá-la por uma variável de ambiente (por exemplo, `GEMINI_API_KEY`), além de revogar/gerar uma nova chave caso a atual já tenha sido exposta publicamente.
+> **Nota de segurança:** uma versão anterior deste arquivo tinha a chave da API do Gemini escrita diretamente no código-fonte. Isso foi corrigido — a chave agora é lida de `GEMINI_API_KEY` via variável de ambiente. Como a chave antiga já esteve exposta publicamente no histórico do repositório, ela deve ser considerada comprometida: revogue-a no [Google AI Studio](https://aistudio.google.com/apikey) e gere uma nova.
 
 Em seguida, execute:
 
@@ -141,7 +142,7 @@ A aplicação sobe em `http://127.0.0.1:5000`.
 
 - `OPENAI_API_KEY` — chave da API da OpenAI (usada pelas duas aplicações)
 - `OPENAI_ORGANIZATION` — ID da organização OpenAI (usado pela aplicação raiz, via `config.py`)
-- Chave da API do Google Gemini (usada pela aplicação `FF25/`; ver observação de segurança acima)
+- `GEMINI_API_KEY` — chave da API do Google Gemini (usada pela aplicação `FF25/`; ver nota de segurança acima)
 
 ## Estrutura do projeto
 

@@ -15,8 +15,8 @@ app = Flask(__name__)
 # --- CONFIGURAÇÃO DOS CLIENTES ---
 
 # 1. Configura Cliente Gemini (Para o Chat)
-# Recomendo usar os.environ["GEMINI_API_KEY"] em produção
-client_gemini = genai.Client(api_key="AIzaSyBsF1YWR91MWDYK-b-geMUFk-uzHKcufhA") 
+# A chave é lida da variável de ambiente GEMINI_API_KEY (defina no arquivo .env)
+client_gemini = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 # 2. Configura Cliente OpenAI (Para Imagens)
 # O client da OpenAI busca automaticamente a chave na variável de ambiente "OPENAI_API_KEY"
